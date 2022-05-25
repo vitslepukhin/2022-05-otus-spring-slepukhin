@@ -3,4 +3,13 @@
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="questionDaoImpl" class="ru.otus.slepukhin.dao.QuestionCsvDaoImpl">
+        <constructor-arg name="resource" value="questions.csv"/>
+    </bean>
+    <bean id="io" class="ru.otus.slepukhin.service.QuizIO.SystemIOImpl">
+    </bean>
+    <bean id="engine" class="ru.otus.slepukhin.service.QuizEngine">
+        <constructor-arg name="questionDao" ref="questionDaoImpl"/>
+        <constructor-arg name="io" ref="io"/>
+    </bean>
 </beans>
