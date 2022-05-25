@@ -1,39 +1,70 @@
 package ru.otus.slepukhin.service;
 
-import lombok.Getter;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import ru.otus.slepukhin.dao.Dao;
 import ru.otus.slepukhin.domain.Question;
+import ru.otus.slepukhin.service.QuizIO.QuizIO;
 
 import java.util.*;
 
-public class QuizEngine {
-    @Getter
-    private final List<Question> questions;
-    private final Map<Question, String> result = new HashMap<>();
-    private Scanner sc;
+@DisplayName("Class QuizEngine")
+class QuizEngineTest {
+    List questions;
 
-    public QuizEngine(Dao<Question> questionDao) {
-        this.questions = questionDao.getAll();
-    }
-
-    public String ask(Question question) {
-        System.out.print(question.getQuestion() + " ");
-        return sc.nextLine();
-    }
-
-    public void process() {
-        sc = new Scanner(System.in);
-        this.questions.forEach(question -> result.put(question, this.ask(question)));
-        System.out.println();
-        sc.close();
-    }
-
-    public void showResult() {
-        System.out.println("Result of quiz:");
-        questions.forEach((question) -> {
-            String yourAnswer = result.get(question);
-            String answer = question.isRightAnswer(yourAnswer) ? "Right." : "Wrong. Right answer is " + question.getAnswer();
-            System.out.println(question.getQuestion() + " " + answer);
+    public QuizEngineTest() {
+        this.questions = this.arrayToList(new Question[]{
+                new Question("question1", "answer1"),
+                new Question("question2", "answer2")
         });
+    }
+
+    @DisplayName("should give correct result")
+    @Test
+    void shouldGiveCorrectResult() {
+        List<String> testAnswers = this.arrayToList(new String[]{
+                "testAnswer1",
+                "testAnswer2",
+        });
+
+        Map<Question, String> expectedResult = new HashMap<>();
+        expectedResult.put((Question) this.questions.get(0), testAnswers.get(0));
+        expectedResult.put((Question) this.questions.get(1), testAnswers.get(1));
+
+
+        QuizEngine quizEngine = new QuizEngine(new TestDao(), new TestIO(testAnswers));
+        quizEngine.process();
+        Map<Question, String> result = quizEngine.getResult();
+        Assertions.assertIterableEquals(expectedResult.keySet(), result.keySet());
+    }
+
+    private <T> List<T> arrayToList(T[] arr) {
+        return new ArrayList<T>(Arrays.asList(arr));
+    }
+
+    class TestDao implements Dao<Question> {
+        @Override
+        public List<Question> getAll() {
+            return questions;
+        }
+    }
+
+    class TestIO implements QuizIO {
+        List<String> answers;
+
+        public TestIO(List<String> answers) {
+            this.answers = answers;
+        }
+
+        @Override
+        public void write(String out) {
+        }
+
+        @Override
+        public String read() {
+            String answer = this.answers.iterator().next();
+            return answer;
+        }
     }
 }
