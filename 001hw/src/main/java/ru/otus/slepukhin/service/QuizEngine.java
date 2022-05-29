@@ -1,44 +1,43 @@
 package ru.otus.slepukhin.service;
 
 import lombok.Getter;
-import ru.otus.slepukhin.dao.Dao;
+import ru.otus.slepukhin.dao.QuestionDao;
 import ru.otus.slepukhin.domain.Question;
-import ru.otus.slepukhin.service.QuizIO.QuizIO;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ru.otus.slepukhin.domain.QuizResult;
+import ru.otus.slepukhin.service.IO.IO;
 
 public class QuizEngine {
     @Getter
-    private final Map<Question, String> result = new HashMap<>();
-    @Getter
-    private final List<Question> questions;
-    private final QuizIO io;
+    private final QuizResult result = new QuizResult();
 
-    public QuizEngine(Dao<Question> questionDao, QuizIO io) {
-        this.questions = questionDao.getAll();
+    private final IO io;
+    private final QuestionDao questionDao;
+
+    public QuizEngine(QuestionDao questionDao, IO io) {
+        this.questionDao = questionDao;
         this.io = io;
     }
 
-    public void process() {
-        this.questions.forEach(question -> {
+    public QuizResult process(boolean showResult) {
+        this.questionDao.getAll().forEach(question -> {
             String answer = this.askQuestion(question);
-            result.put(question, answer);
+            result.answerQuestion(question, answer);
         });
-    }
 
-    public void showResult() {
-        if (this.questions.size() != this.result.size()) {
-            return;
+        if (showResult) {
+            this.showResult();
         }
 
+        return this.result;
+    }
+
+    private void showResult() {
         String preamble = "Result of quiz:";
-        Integer rightAnswers = this.questions.stream().mapToInt(question -> {
-            String yourAnswer = this.result.get(question);
+        int rightAnswers = questionDao.getAll().stream().mapToInt(question -> {
+            String yourAnswer = this.result.getAnswer(question);
             return question.isRightAnswer(yourAnswer) ? 1 : 0;
         }).sum();
-        this.io.write(preamble + rightAnswers + "/" + this.questions.size());
+        this.io.write(preamble + rightAnswers + "/" + questionDao.getAll().size());
     }
 
     private String askQuestion(Question question) {

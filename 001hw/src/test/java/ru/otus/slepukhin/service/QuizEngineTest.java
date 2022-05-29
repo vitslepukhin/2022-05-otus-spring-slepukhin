@@ -3,22 +3,19 @@ package ru.otus.slepukhin.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.slepukhin.dao.Dao;
+import ru.otus.slepukhin.dao.QuestionDao;
 import ru.otus.slepukhin.domain.Question;
-import ru.otus.slepukhin.service.QuizIO.QuizIO;
+import ru.otus.slepukhin.domain.QuizResult;
+import ru.otus.slepukhin.service.IO.IO;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @DisplayName("Class QuizEngine")
 class QuizEngineTest {
-    List questions;
-
-    public QuizEngineTest() {
-        this.questions = this.arrayToList(new Question[]{
-                new Question("question1", "answer1"),
-                new Question("question2", "answer2")
-        });
-    }
 
     @DisplayName("should give correct result")
     @Test
@@ -26,35 +23,31 @@ class QuizEngineTest {
         List<String> testAnswers = this.arrayToList(new String[]{
                 "testAnswer1",
                 "testAnswer2",
-        });
+                });
 
-        Map<Question, String> expectedResult = new HashMap<>();
-        expectedResult.put((Question) this.questions.get(0), testAnswers.get(0));
-        expectedResult.put((Question) this.questions.get(1), testAnswers.get(1));
+        QuizResult expectedResult = new QuizResult();
+        List<Question> questions = new TestDao().getAll();
+        expectedResult.answerQuestion(questions.get(0), testAnswers.get(0));
+        expectedResult.answerQuestion(questions.get(1), testAnswers.get(1));
 
+        List<String> expectedResultIterable = questions.stream().map(expectedResult::getAnswer).collect(Collectors.toList());
 
-        QuizEngine quizEngine = new QuizEngine(new TestDao(), new TestIO(testAnswers));
-        quizEngine.process();
-        Map<Question, String> result = quizEngine.getResult();
-        Assertions.assertIterableEquals(expectedResult.keySet(), result.keySet());
+        QuizEngine quizEngine = new QuizEngine(new TestDao(), new TestIO(expectedResultIterable));
+        QuizResult quizResult = quizEngine.process(true);
+
+        List<String> resultIterable = questions.stream().map(quizResult::getAnswer).collect(Collectors.toList());
+        Assertions.assertIterableEquals(expectedResultIterable, resultIterable);
     }
 
     private <T> List<T> arrayToList(T[] arr) {
-        return new ArrayList<T>(Arrays.asList(arr));
+        return new ArrayList<>(Arrays.asList(arr));
     }
 
-    class TestDao implements Dao<Question> {
-        @Override
-        public List<Question> getAll() {
-            return questions;
-        }
-    }
-
-    class TestIO implements QuizIO {
-        List<String> answers;
+    static class TestIO implements IO {
+        Iterator<String> answerIterator;
 
         public TestIO(List<String> answers) {
-            this.answers = answers;
+            this.answerIterator = answers.iterator();
         }
 
         @Override
@@ -63,8 +56,18 @@ class QuizEngineTest {
 
         @Override
         public String read() {
-            String answer = this.answers.iterator().next();
-            return answer;
+            return this.answerIterator.next();
+        }
+    }
+
+    class TestDao implements QuestionDao {
+
+        @Override
+        public List<Question> getAll() {
+            return arrayToList(new Question[]{
+                    new Question("question1", "answer1"),
+                    new Question("question2", "answer2"),
+                    });
         }
     }
 }

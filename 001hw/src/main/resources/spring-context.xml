@@ -6,7 +6,7 @@
     <bean id="questionDaoImpl" class="ru.otus.slepukhin.dao.QuestionCsvDaoImpl">
         <constructor-arg name="resource" value="questions.csv"/>
     </bean>
-    <bean id="io" class="ru.otus.slepukhin.service.QuizIO.SystemIOImpl">
+    <bean id="io" class="ru.otus.slepukhin.service.IO.SystemIOImpl">
     </bean>
     <bean id="engine" class="ru.otus.slepukhin.service.QuizEngine">
         <constructor-arg name="questionDao" ref="questionDaoImpl"/>

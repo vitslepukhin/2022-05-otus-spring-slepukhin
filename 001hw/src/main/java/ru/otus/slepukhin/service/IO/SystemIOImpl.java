@@ -1,8 +1,8 @@
-package ru.otus.slepukhin.service.QuizIO;
+package ru.otus.slepukhin.service.IO;
 
 import java.util.Scanner;
 
-public class SystemQuizIOImpl implements QuizIO {
+public class SystemIOImpl implements IO {
 
     private final Scanner sc = new Scanner(System.in);
 
