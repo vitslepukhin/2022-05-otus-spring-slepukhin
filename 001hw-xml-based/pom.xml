@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.otus.slepukhin</groupId>
-    <artifactId>slepukhin-001-hw</artifactId>
+    <artifactId>001-hw-xml-based</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
