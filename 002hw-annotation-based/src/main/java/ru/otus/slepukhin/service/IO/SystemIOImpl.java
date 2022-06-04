@@ -16,6 +16,12 @@ public class SystemIOImpl implements IO {
 
     @Override
     public String read() {
-        return this.sc.nextLine();
+        return sc.nextLine();
+    }
+
+    @Override
+    public String request(String message) {
+        write(message);
+        return read();
     }
 }

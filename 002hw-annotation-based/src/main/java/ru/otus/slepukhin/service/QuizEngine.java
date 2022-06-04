@@ -2,18 +2,15 @@ package ru.otus.slepukhin.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.otus.slepukhin.dao.NotFoundQuestionsException;
 import ru.otus.slepukhin.dao.QuestionDao;
 import ru.otus.slepukhin.domain.Question;
 import ru.otus.slepukhin.domain.QuizResult;
 import ru.otus.slepukhin.service.IO.IO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class QuizEngine {
-
     private final IO io;
     private final QuestionDao questionDao;
     private final int rightAnswersToPassQuiz;
@@ -24,46 +21,34 @@ public class QuizEngine {
         this.rightAnswersToPassQuiz = rightAnswersToPassQuiz;
     }
 
-    public QuizResult process() {
-        QuizResult result = new QuizResult(this.rightAnswersToPassQuiz);
+    public void process() {
+        String studentName = requestName();
 
-        this.requestName();
+        QuizResult result = new QuizResult(studentName, rightAnswersToPassQuiz);
 
-        this.getQuestions()
-            .forEach(question -> {
-                String answer = this.askQuestion(question);
-                result.answerQuestion(question, answer);
-            });
+        getQuestions().forEach(question -> {
+            String answer = askQuestion(question);
+            result.answerQuestion(question, answer);
+        });
 
-        this.showResult(result);
-
-        return result;
+        showResult(result);
     }
 
-    private void requestName() {
-        this.request("What is your name?");
+    private String requestName() {
+        return io.request("What is your name?");
     }
 
-    private void showResult(QuizResult result) {
-        String preamble = "Result of quiz:";
-        String conclusion = result.isPassed() ? "PASSED" : "FAILED";
-        this.io.write(preamble + " " + conclusion);
+    private void showResult(QuizResult quizResult) {
+        String preamble = quizResult.getStudentName() + " your result:";
+        String conclusion = quizResult.isPassed() ? "PASSED" : "FAILED";
+        io.write(preamble + " " + conclusion);
     }
 
     private String askQuestion(Question question) {
-        return this.request(question.getQuestion());
-    }
-
-    private String request(String query) {
-        this.io.write(query);
-        return this.io.read();
+        return io.request(question.getQuestion());
     }
 
     private List<Question> getQuestions() {
-        try {
-            return this.questionDao.getAll();
-        } catch (NotFoundQuestionsException e) {
-            return new ArrayList<>();
-        }
+        return questionDao.getAll();
     }
 }

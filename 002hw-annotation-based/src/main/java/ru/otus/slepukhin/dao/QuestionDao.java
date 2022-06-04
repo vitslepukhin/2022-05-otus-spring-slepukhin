@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface QuestionDao {
 
-    List<Question> getAll() throws
-            NotFoundQuestionsException;
+    List<Question> getAll();
 }

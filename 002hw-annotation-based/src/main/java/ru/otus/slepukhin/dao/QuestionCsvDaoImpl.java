@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 import ru.otus.slepukhin.domain.Question;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -25,19 +24,16 @@ public class QuestionCsvDaoImpl implements QuestionDao {
     }
 
     @Override
-    public List<Question> getAll() throws
-            NotFoundQuestionsException {
+    public List<Question> getAll() {
         return this.getQuestionsFromResource(this.resource);
     }
 
-    private List<Question> getQuestionsFromResource(Resource resource) throws
-            NotFoundQuestionsException {
+    private List<Question> getQuestionsFromResource(Resource resource) {
         try (
                 InputStream resourceAsStream = resource.getInputStream();
                 InputStreamReader inputStreamReader = new InputStreamReader(resourceAsStream);
                 BufferedReader reader = new BufferedReader(inputStreamReader)
         ) {
-
             return reader.lines()
                          .map(line -> {
                              String[] csvRecord = line.split(DELIMITER);
@@ -46,8 +42,9 @@ public class QuestionCsvDaoImpl implements QuestionDao {
                              return new Question(question, answer);
                          })
                          .collect(toCollection(ArrayList::new));
-        } catch (IOException e) {
-            throw new NotFoundQuestionsException(this.resource.getFilename());
+
+        } catch (Exception e) {
+            return new ArrayList<>();
         }
 
     }
