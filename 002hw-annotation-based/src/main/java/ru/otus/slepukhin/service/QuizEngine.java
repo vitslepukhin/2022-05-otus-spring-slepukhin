@@ -6,6 +6,7 @@ import ru.otus.slepukhin.dao.QuestionDao;
 import ru.otus.slepukhin.dao.QuestionsLoadingException;
 import ru.otus.slepukhin.domain.Question;
 import ru.otus.slepukhin.domain.QuizResult;
+import ru.otus.slepukhin.domain.Student;
 import ru.otus.slepukhin.service.IO.IO;
 
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ public class QuizEngine {
     }
 
     public void process() {
-        String studentName = requestName();
+        var student = new Student(requestName());
 
-        QuizResult result = new QuizResult(studentName, rightAnswersToPassQuiz);
+        QuizResult result = new QuizResult(student, rightAnswersToPassQuiz);
 
         getQuestions().forEach(question -> {
             String answer = askQuestion(question);
@@ -41,7 +42,7 @@ public class QuizEngine {
     }
 
     private void showResult(QuizResult quizResult) {
-        String preamble = quizResult.getStudentName() + " your result:";
+        String preamble = quizResult.getStudent().getName() + " your result:";
         String conclusion = quizResult.isPassed() ? "PASSED" : "FAILED";
         io.write(preamble + " " + conclusion);
     }

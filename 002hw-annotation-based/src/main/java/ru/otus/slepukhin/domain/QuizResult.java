@@ -7,12 +7,12 @@ import java.util.Map;
 
 public class QuizResult {
     @Getter
-    private final String studentName;
+    private final Student student;
     private final Map<Question, String> result = new HashMap<>();
     private final int rightAnswersToPass;
 
-    public QuizResult(String studentName, int rightAnswersToPass) {
-        this.studentName = studentName;
+    public QuizResult(Student student, int rightAnswersToPass) {
+        this.student = student;
         this.rightAnswersToPass = rightAnswersToPass;
     }
 
