@@ -2,21 +2,28 @@ package ru.otus.slepukhin.service.IO;
 
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 @Service
 public class SystemIOImpl implements IO {
+    private final PrintStream output;
+    private final Scanner input;
 
-    private final Scanner sc = new Scanner(System.in);
+    public SystemIOImpl(PrintStream outputStream, InputStream inputStream) {
+        this.output = outputStream;
+        this.input = new Scanner(inputStream);
+    }
 
     @Override
     public void write(String out) {
-        System.out.println(out + " ");
+        output.println(out + " ");
     }
 
     @Override
     public String read() {
-        return sc.nextLine();
+        return input.nextLine();
     }
 
     @Override
