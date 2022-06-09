@@ -30,7 +30,7 @@ public class QuizEngine {
 
         getQuestions().forEach(question -> {
             String answer = askQuestion(question);
-            result.answerQuestion(question, answer);
+            result.applyQuestionAnswer(question, answer);
         });
 
         showResult(result);

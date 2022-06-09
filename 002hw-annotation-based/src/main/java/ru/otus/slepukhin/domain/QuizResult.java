@@ -16,7 +16,7 @@ public class QuizResult {
         this.rightAnswersToPass = rightAnswersToPass;
     }
 
-    public void answerQuestion(Question question, String answer) {
+    public void applyQuestionAnswer(Question question, String answer) {
         result.put(question, answer);
     }
 
