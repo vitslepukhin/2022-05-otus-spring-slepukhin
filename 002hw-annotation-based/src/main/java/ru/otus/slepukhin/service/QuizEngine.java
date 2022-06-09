@@ -3,10 +3,12 @@ package ru.otus.slepukhin.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.slepukhin.dao.QuestionDao;
+import ru.otus.slepukhin.dao.QuestionsLoadingException;
 import ru.otus.slepukhin.domain.Question;
 import ru.otus.slepukhin.domain.QuizResult;
 import ru.otus.slepukhin.service.IO.IO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,6 +51,11 @@ public class QuizEngine {
     }
 
     private List<Question> getQuestions() {
-        return questionDao.getAll();
+        try {
+            return questionDao.getAll();
+        } catch (QuestionsLoadingException e) {
+            io.write(e.getMessage());
+            return new ArrayList<>();
+        }
     }
 }

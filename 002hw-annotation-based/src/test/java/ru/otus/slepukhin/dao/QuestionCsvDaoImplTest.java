@@ -26,8 +26,27 @@ class QuestionCsvDaoImplTest {
         };
         List<Question> questions = new ArrayList<>(Arrays.asList(questionArray));
 
-        Assertions.assertIterableEquals(questions, questionCsvDaoImpl.getAll());
+        try {
+            Assertions.assertIterableEquals(questions, questionCsvDaoImpl.getAll());
+        } catch (Exception e) {
+            Assertions.fail("Expected no exception");
+        }
 
+    }
+
+    @DisplayName("should throws exception")
+    @Test
+    void shouldThrowsException() {
+        String fileName = "bad-file.csv";
+        try {
+            Resource res = new ClassPathResource(fileName);
+            QuestionCsvDaoImpl questionCsvDaoImpl = new QuestionCsvDaoImpl(res);
+            questionCsvDaoImpl.getAll();
+            Assertions.fail("Expected QuestionsLoadingException");
+
+        } catch (QuestionsLoadingException e) {
+            Assertions.assertNotNull(e);
+        }
     }
 }
 

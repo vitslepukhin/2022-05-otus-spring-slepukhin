@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.slepukhin.dao.QuestionDao;
+import ru.otus.slepukhin.dao.QuestionsLoadingException;
 import ru.otus.slepukhin.domain.Question;
 import ru.otus.slepukhin.service.IO.IO;
 
@@ -22,7 +23,8 @@ class QuizEngineTest {
     private final IO mockIO = mock(IO.class);
 
     @BeforeEach
-    void initQuestionDao() {
+    void initQuestionDao() throws
+            QuestionsLoadingException {
         when(mockQuestionDao.getAll()).thenReturn(arrayToList(new Question[]{
                 new Question("question1", "rightAnswer1"),
                 new Question("question2", "rightAnswer2"),

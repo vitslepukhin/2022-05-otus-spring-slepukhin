@@ -19,16 +19,17 @@ public class QuestionCsvDaoImpl implements QuestionDao {
     private final Resource resource;
 
     public QuestionCsvDaoImpl(@Value("${csv.file}") Resource resource) {
-
         this.resource = resource;
     }
 
     @Override
-    public List<Question> getAll() {
+    public List<Question> getAll() throws
+            QuestionsLoadingException {
         return this.getQuestionsFromResource(this.resource);
     }
 
-    private List<Question> getQuestionsFromResource(Resource resource) {
+    private List<Question> getQuestionsFromResource(Resource resource) throws
+            QuestionsLoadingException {
         try (
                 InputStream resourceAsStream = resource.getInputStream();
                 InputStreamReader inputStreamReader = new InputStreamReader(resourceAsStream);
@@ -44,9 +45,8 @@ public class QuestionCsvDaoImpl implements QuestionDao {
                          .collect(toCollection(ArrayList::new));
 
         } catch (Exception e) {
-            return new ArrayList<>();
+            throw new QuestionsLoadingException(resource.getFilename());
         }
-
     }
 }
 

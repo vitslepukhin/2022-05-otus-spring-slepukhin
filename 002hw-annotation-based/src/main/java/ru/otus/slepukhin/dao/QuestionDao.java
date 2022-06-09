@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface QuestionDao {
 
-    List<Question> getAll();
+    List<Question> getAll() throws
+            QuestionsLoadingException;
 }
