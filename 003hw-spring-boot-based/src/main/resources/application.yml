@@ -1,0 +1,6 @@
+source:
+  en: questions_en.csv
+  ru: questions_ru.csv
+rightAnswersToPassQuiz: 3
+language: en
+spring.output.ansi.enabled: ALWAYS
