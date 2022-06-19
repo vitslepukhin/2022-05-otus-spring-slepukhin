@@ -1,17 +1,14 @@
 package ru.otus.slepukhin.service.IO;
 
-import org.springframework.stereotype.Service;
-
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-@Service
-public class SystemIOImpl implements IO {
+public class IOImpl implements IO {
     private final PrintStream output;
     private final Scanner input;
 
-    public SystemIOImpl(PrintStream outputStream, InputStream inputStream) {
+    public IOImpl(PrintStream outputStream, InputStream inputStream) {
         this.output = outputStream;
         this.input = new Scanner(inputStream);
     }

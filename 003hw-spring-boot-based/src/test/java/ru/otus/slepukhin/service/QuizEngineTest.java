@@ -3,12 +3,12 @@ package ru.otus.slepukhin.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import ru.otus.slepukhin.config.QuizProperties;
+import ru.otus.slepukhin.config.QuizConfigProvider;
 import ru.otus.slepukhin.dao.QuestionDao;
 import ru.otus.slepukhin.dao.QuestionsLoadingException;
 import ru.otus.slepukhin.domain.Question;
 import ru.otus.slepukhin.service.IO.IO;
-import ru.otus.slepukhin.service.translation.Translation;
+import ru.otus.slepukhin.service.translator.Translator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,8 +23,8 @@ class QuizEngineTest {
 
     private final QuestionDao mockQuestionDao = mock(QuestionDao.class);
     private final IO mockIO = mock(IO.class);
-    private final Translation mockTranslation = mock(Translation.class);
-    private final QuizProperties mockQuizProperties = mock(QuizProperties.class);
+    private final Translator mockTranslator = mock(Translator.class);
+    private final QuizConfigProvider mockQuizConfigProvider = mock(QuizConfigProvider.class);
 
 
     @BeforeEach
@@ -43,7 +43,7 @@ class QuizEngineTest {
 
     @BeforeEach
     void initTranslations() {
-        when(mockTranslation.translate(anyString())).thenAnswer(i -> i.getArguments()[0]);
+        when(mockTranslator.translate(anyString())).thenAnswer(i -> i.getArguments()[0]);
     }
 
     @DisplayName("should give negative result")
@@ -51,10 +51,10 @@ class QuizEngineTest {
     void shouldGiveNegativeResult() {
         when(mockIO.request("question1")).thenReturn("wrongAnswer1");
         when(mockIO.request("question2")).thenReturn("rightAnswer2");
-        when(mockQuizProperties.getRightAnswersToPassQuiz()).thenReturn(RIGHT_ANSWERS_TO_PASS_QUIZ);
+        when(mockQuizConfigProvider.getRightAnswersToPassQuiz()).thenReturn(RIGHT_ANSWERS_TO_PASS_QUIZ);
 
-        QuizEngine quizEngine = new QuizEngine(mockQuestionDao, mockIO, mockQuizProperties, mockTranslation);
-        quizEngine.run();
+        QuizEngine quizEngine = new QuizEngine(mockQuestionDao, mockIO, mockQuizConfigProvider, mockTranslator);
+        quizEngine.process();
 
         verify(mockIO, atLeastOnce()).write(getFormattedTestResult("quiz-engine.failed"));
     }
@@ -64,9 +64,9 @@ class QuizEngineTest {
     void shouldGivePositiveResult() {
         when(mockIO.request("question1")).thenReturn("rightAnswer1");
         when(mockIO.request("question2")).thenReturn("rightAnswer2");
-        when(mockQuizProperties.getRightAnswersToPassQuiz()).thenReturn(RIGHT_ANSWERS_TO_PASS_QUIZ);
+        when(mockQuizConfigProvider.getRightAnswersToPassQuiz()).thenReturn(RIGHT_ANSWERS_TO_PASS_QUIZ);
 
-        QuizEngine quizEngine = new QuizEngine(mockQuestionDao, mockIO, mockQuizProperties, mockTranslation);
+        QuizEngine quizEngine = new QuizEngine(mockQuestionDao, mockIO, mockQuizConfigProvider, mockTranslator);
         quizEngine.process();
 
         verify(mockIO, atLeastOnce()).write(getFormattedTestResult("quiz-engine.passed"));

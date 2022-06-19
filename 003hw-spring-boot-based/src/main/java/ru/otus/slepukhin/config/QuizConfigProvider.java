@@ -1,5 +1,5 @@
 package ru.otus.slepukhin.config;
 
-public interface QuizProperties {
+public interface QuizConfigProvider {
     Integer getRightAnswersToPassQuiz();
 }

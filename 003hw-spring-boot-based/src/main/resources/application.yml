@@ -3,4 +3,5 @@ source:
   ru: questions_ru.csv
 rightAnswersToPassQuiz: 3
 language: en
+spring.messages.fallback-to-system-locale: false
 spring.output.ansi.enabled: ALWAYS

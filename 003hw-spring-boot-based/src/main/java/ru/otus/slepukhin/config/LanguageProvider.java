@@ -1,5 +1,5 @@
 package ru.otus.slepukhin.config;
 
-public interface LanguageProperties {
+public interface LanguageProvider {
     String getLanguage();
 }

@@ -1,43 +1,38 @@
 package ru.otus.slepukhin.service;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;
-import ru.otus.slepukhin.config.QuizProperties;
+import ru.otus.slepukhin.config.QuizConfigProvider;
 import ru.otus.slepukhin.dao.QuestionDao;
 import ru.otus.slepukhin.dao.QuestionsLoadingException;
 import ru.otus.slepukhin.domain.Question;
 import ru.otus.slepukhin.domain.QuizResult;
 import ru.otus.slepukhin.domain.Student;
 import ru.otus.slepukhin.service.IO.IO;
-import ru.otus.slepukhin.service.translation.Translation;
+import ru.otus.slepukhin.service.translator.Translator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class QuizEngine implements CommandLineRunner {
+public class QuizEngine {
     private final IO io;
     private final QuestionDao questionDao;
     private final int rightAnswersToPassQuiz;
-    private final Translation translation;
+    private final Translator translator;
 
 
     public QuizEngine(
-            QuestionDao questionDao, IO io, QuizProperties quizConfig, Translation translation
+            QuestionDao questionDao, IO io, QuizConfigProvider quizConfig, Translator translator
     ) {
         this.questionDao = questionDao;
         this.io = io;
-        this.translation = translation;
+        this.translator = translator;
         this.rightAnswersToPassQuiz = quizConfig.getRightAnswersToPassQuiz();
     }
 
-    @Override
-    public void run(String... args) {
-        process();
-    }
-
     public void process() {
-        var student = new Student(requestName());
+        var studentName = requestName();
+        var student = new Student(studentName);
 
         QuizResult result = new QuizResult(student, rightAnswersToPassQuiz);
 
@@ -50,14 +45,14 @@ public class QuizEngine implements CommandLineRunner {
     }
 
     private String requestName() {
-        return io.request(translation.translate("quiz-engine.name-request"));
+        return io.request(translator.translate("quiz-engine.name-request"));
     }
 
     private void showResult(QuizResult quizResult) {
         String preamble = quizResult.getStudent()
-                                    .getName() + " " + translation.translate("quiz-engine.result-preamble");
-        String conclusion = quizResult.isPassed() ? translation.translate("quiz-engine.passed")
-                                                  : translation.translate("quiz-engine.failed");
+                                    .getName() + " " + translator.translate("quiz-engine.result-preamble");
+        String conclusion = quizResult.isPassed() ? translator.translate("quiz-engine.passed")
+                                                  : translator.translate("quiz-engine.failed");
         io.write(preamble + " " + conclusion);
     }
 
