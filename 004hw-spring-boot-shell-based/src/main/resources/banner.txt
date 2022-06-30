@@ -1,0 +1,3 @@
+${AnsiBackground.YELLOW}-----------------------------------------${AnsiColor.DEFAULT}${AnsiBackground.DEFAULT}
+${AnsiColor.BRIGHT_WHITE}Slepukhin Vitalii homework${AnsiColor.DEFAULT}${AnsiBackground.DEFAULT}
+${AnsiBackground.YELLOW}-----------------------------------------${AnsiColor.DEFAULT}${AnsiBackground.DEFAULT}

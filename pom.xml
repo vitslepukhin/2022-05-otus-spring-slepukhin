@@ -13,5 +13,7 @@
     <modules>
         <module>001hw-xml-based</module>
         <module>002hw-annotation-based</module>
+        <module>003hw-spring-boot-based</module>
+        <module>004hw-spring-boot-shell-based</module>
     </modules>
 </project>
