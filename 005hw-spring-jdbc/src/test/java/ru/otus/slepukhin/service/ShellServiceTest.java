@@ -8,7 +8,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.shell.Input;
 import org.springframework.shell.Shell;
 import ru.otus.slepukhin.dao.BookDao;
+import ru.otus.slepukhin.domain.Author;
 import ru.otus.slepukhin.domain.Book;
+import ru.otus.slepukhin.domain.Genre;
 
 import static org.mockito.Mockito.verify;
 
@@ -60,7 +62,7 @@ class ShellServiceTest {
 
         });
 
-        verify(mockBookDao).insert(new Book("bookTitle", 1L, 1L));
+        verify(mockBookDao).insert(new Book("bookTitle", new Author(1L), new Genre(1L)));
     }
 
     @DisplayName("Should invoke update method")
@@ -74,6 +76,6 @@ class ShellServiceTest {
 
         });
 
-        verify(mockBookDao).update(new Book(1L, "bookTitle", 1L, 1L));
+        verify(mockBookDao).update(new Book(1L, "bookTitle", new Author(1L), new Genre(1L)));
     }
 }

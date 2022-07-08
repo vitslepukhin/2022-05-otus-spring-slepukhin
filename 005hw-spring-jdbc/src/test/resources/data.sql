@@ -1,5 +1,5 @@
 INSERT INTO genres
-    (genre)
+    (name)
 VALUES
     ('science'),
     ('popular'),
