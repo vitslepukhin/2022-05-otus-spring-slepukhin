@@ -15,5 +15,6 @@
         <module>002hw-annotation-based</module>
         <module>003hw-spring-boot-based</module>
         <module>004hw-spring-boot-shell-based</module>
+        <module>005hw-spring-jdbc</module>
     </modules>
 </project>
