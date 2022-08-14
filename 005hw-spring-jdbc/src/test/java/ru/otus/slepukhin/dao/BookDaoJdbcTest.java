@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.dao.EmptyResultDataAccessException;
+import ru.otus.slepukhin.domain.Author;
 import ru.otus.slepukhin.domain.Book;
+import ru.otus.slepukhin.domain.Genre;
 
 import java.util.List;
 
@@ -19,12 +21,25 @@ import static org.assertj.core.api.Assertions.*;
 class BookDaoJdbcTest {
     private static final int EXPECTED_BOOKS_COUNT = 3;
     private static final int EXISTING_BOOK_ID = 2;
-    private static final Book EXPECTED_BOOK = new Book(2, "Folk stories", 2L, 3L);
-    private static final Book BOOK_FOR_INSERT = new Book("Inserted book", 2L, 2L);
-    private static final List<Book> EXPECTED_BOOKS_LIST = List.of(new Book(1, "Theoretical physics", 1L, 1L),
-                                                                  new Book(2, "Folk stories", 2L, 3L),
-                                                                  new Book(3, "Popular chemistry", 3L, 2L)
-    );
+    private static final Book EXPECTED_BOOK = new Book(2,
+            "Folk stories",
+            new Author(2L, "Smith John"),
+            new Genre(3L, "folk"));
+    private static final Book BOOK_FOR_INSERT = new Book("Inserted book",
+            new Author(2L, "Smith John"),
+            new Genre(2L, "popular"));
+    private static final List<Book> EXPECTED_BOOKS_LIST = List.of(new Book(1,
+                    "Theoretical physics",
+                    new Author(1L, "Pushkin Alexander"),
+                    new Genre(1L, "science")),
+            new Book(2,
+                    "Folk stories",
+                    new Author(2L, "Smith John"),
+                    new Genre(3L, "folk")),
+            new Book(3,
+                    "Popular chemistry",
+                    new Author(3L, "Family Name"),
+                    new Genre(2L, "popular")));
 
     @Autowired
     private BookDaoJdbc bookDaoJdbc;
@@ -32,13 +47,13 @@ class BookDaoJdbcTest {
     @DisplayName("should correct return count")
     @Test
     void shouldReturnCorrectCount() {
-        Assertions.assertEquals(bookDaoJdbc.count(), EXPECTED_BOOKS_COUNT);
+        Assertions.assertEquals(EXPECTED_BOOKS_COUNT, bookDaoJdbc.count());
     }
 
     @DisplayName("should correct return book by id")
     @Test
     void shouldCorrectReturnGetById() {
-        Assertions.assertEquals(bookDaoJdbc.getById(EXPECTED_BOOK.getId()), EXPECTED_BOOK);
+        Assertions.assertEquals(EXPECTED_BOOK, bookDaoJdbc.getById(EXPECTED_BOOK.getId()));
     }
 
     @DisplayName("should correct return all books")
@@ -61,10 +76,10 @@ class BookDaoJdbcTest {
     void shouldCorrectUpdate() {
         var existingBook = bookDaoJdbc.getById(EXISTING_BOOK_ID);
 
-        var updatedBook = new Book(existingBook.getId(), "Updated title", 1L, 1L);
+        var updatedBook = new Book(existingBook.getId(), "Updated title", new Author(1L, "Pushkin Alexander"), new Genre(1L, "science"));
         bookDaoJdbc.update(updatedBook);
 
-        assertThat(bookDaoJdbc.getById(EXISTING_BOOK_ID)).isEqualTo(updatedBook);
+        assertThat(bookDaoJdbc.getById(EXISTING_BOOK_ID)).usingRecursiveComparison().isEqualTo(updatedBook);
     }
 
     @DisplayName("should correct delete book by id")
