@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @DisplayName("Class BookService")
-class BookServiceTest {
+class BookServiceImplTest {
     private BookDao mockBookDao = mock(BookDao.class);
     private static final int EXPECTED_BOOKS_COUNT = 3;
     private static final long EXISTING_BOOK_ID = 2;
@@ -39,11 +39,11 @@ class BookServiceTest {
                     new Author(3L, "Family Name"),
                     new Genre(2L, "popular")));
 
-    private BookService bookService;
+    private BookServiceImpl bookServiceImpl;
 
     @BeforeEach
     void initBookService() {
-        bookService = new BookService(mockBookDao);
+        bookServiceImpl = new BookServiceImpl(mockBookDao);
     }
 
 
@@ -51,34 +51,34 @@ class BookServiceTest {
     @Test
     void shouldCorrectCount() {
         when(mockBookDao.count()).thenReturn(EXPECTED_BOOKS_COUNT);
-        assertEquals(EXPECTED_BOOKS_COUNT, bookService.getCount());
+        assertEquals(EXPECTED_BOOKS_COUNT, bookServiceImpl.getCount());
     }
 
     @DisplayName("Should correct getById method")
     @Test
     void shouldCorrectGetById() {
         when(mockBookDao.getById(EXISTING_BOOK_ID)).thenReturn(EXPECTED_BOOK);
-        assertEquals(EXPECTED_BOOK, bookService.getById(EXISTING_BOOK_ID));
+        assertEquals(EXPECTED_BOOK, bookServiceImpl.getById(EXISTING_BOOK_ID));
     }
 
     @DisplayName("Should correct getAll")
     @Test
     void shouldCorrectGetAll() {
         when(mockBookDao.getAll()).thenReturn(EXPECTED_BOOKS_LIST);
-        assertEquals(EXPECTED_BOOKS_LIST, bookService.getAll());
+        assertEquals(EXPECTED_BOOKS_LIST, bookServiceImpl.getAll());
     }
 
     @DisplayName("Should correct insert")
     @Test
     void shouldCorrectInsert() {
         when(mockBookDao.insert(BOOK_FOR_INSERT)).thenReturn(INSERTED_BOOK_ID);
-        assertEquals(INSERTED_BOOK_ID, bookService.insert(BOOK_FOR_INSERT));
+        assertEquals(INSERTED_BOOK_ID, bookServiceImpl.insert(BOOK_FOR_INSERT));
     }
 
     @DisplayName("Should correct delete")
     @Test
     void shouldCorrectDelete() {
-        bookService.deleteById(EXISTING_BOOK_ID);
+        bookServiceImpl.deleteById(EXISTING_BOOK_ID);
         verify(mockBookDao, atLeastOnce()).deleteById(EXISTING_BOOK_ID);
     }
 
@@ -86,7 +86,7 @@ class BookServiceTest {
     @Test
     void shouldCorrectUpdate() {
         var updatedBook = new Book(EXISTING_BOOK_ID, "Updated title", new Author(1L, "Pushkin Alexander"), new Genre(1L, "science"));
-        bookService.update(updatedBook);
+        bookServiceImpl.update(updatedBook);
 
         verify(mockBookDao, atLeastOnce()).update(updatedBook);
     }
