@@ -22,12 +22,12 @@ public class CommentShellService {
     }
 
     @ShellMethod(value = "Get comment by id", key = groupPrefix + " getById")
-    public Comment getById(@ShellOption long id) {
+    public Comment getById(long id) {
         return commentService.getById(id);
     }
 
-    @ShellMethod(value = "Get comment by book id", key = groupPrefix + " getCommentByBookId")
-    public List<Comment> getByBookId(@ShellOption long commentId) {
+    @ShellMethod(value = "Get comment by book id", key = groupPrefix + " getByBookId")
+    public List<Comment> getByBookId(long commentId) {
         return commentService.getByBookId(commentId);
     }
 
