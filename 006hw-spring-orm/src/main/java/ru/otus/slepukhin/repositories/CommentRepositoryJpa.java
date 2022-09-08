@@ -19,7 +19,6 @@ public class CommentRepositoryJpa implements CommentRepository {
     @PersistenceContext
     private final EntityManager em;
 
-    @Transactional
     @Override
     public Comment save(Comment book) {
         if (book.getId() <= 0) {
@@ -30,13 +29,11 @@ public class CommentRepositoryJpa implements CommentRepository {
         }
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Optional<Comment> findById(long id) {
         return Optional.ofNullable(em.find(Comment.class, id));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Comment> findByBookId(long bookId) {
         TypedQuery<Comment> query = em.createQuery("SELECT s FROM Comment s WHERE s.book_id = :book_id", Comment.class);
@@ -44,21 +41,18 @@ public class CommentRepositoryJpa implements CommentRepository {
         return query.getResultList();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Comment> findAll() {
         TypedQuery<Comment> query = em.createQuery("SELECT s FROM Comment s", Comment.class);
         return query.getResultList();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public long count() {
         TypedQuery<Long> query = em.createQuery("SELECT count(*) FROM Comment s", Long.class);
         return query.getSingleResult();
     }
 
-    @Transactional
     @Override
     public void deleteById(long id) {
         Query query = em.createQuery("DELETE " +

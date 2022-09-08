@@ -19,7 +19,6 @@ public class BookRepositoryJpa implements BookRepository {
     @PersistenceContext
     private final EntityManager em;
 
-    @Transactional
     @Override
     public Book save(Book book) {
         if (book.getId() <= 0) {
@@ -30,27 +29,23 @@ public class BookRepositoryJpa implements BookRepository {
         }
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Optional<Book> findById(long id) {
         return Optional.ofNullable(em.find(Book.class, id));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Book> findAll() {
         TypedQuery<Book> query = em.createQuery("SELECT s FROM Book s JOIN FETCH s.genre", Book.class);
         return query.getResultList();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public long count() {
         Query query = em.createQuery("SELECT count(*) FROM Book s");
         return (long) query.getSingleResult();
     }
 
-    @Transactional
     @Override
     public void deleteById(long id) {
         Query query = em.createQuery("DELETE " +
@@ -59,5 +54,4 @@ public class BookRepositoryJpa implements BookRepository {
         query.setParameter("id", id);
         query.executeUpdate();
     }
-
 }
