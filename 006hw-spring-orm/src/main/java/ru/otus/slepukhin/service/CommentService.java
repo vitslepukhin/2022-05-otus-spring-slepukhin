@@ -7,7 +7,7 @@ import java.util.List;
 public interface CommentService {
     long getCount();
 
-    Comment getById(long id);
+    Comment getById(long id) throws Exception;
 
     List<Comment> getByBookId(long bookId);
 

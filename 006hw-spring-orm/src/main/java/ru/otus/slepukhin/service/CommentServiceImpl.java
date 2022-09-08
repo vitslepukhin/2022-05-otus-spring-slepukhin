@@ -22,8 +22,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional(readOnly = true)
     @Override
-    public Comment getById(long id) {
-        return commentRepository.findById(id).get();
+    public Comment getById(long id) throws Exception {
+        return commentRepository.findById(id).orElseThrow(() -> new Exception(String.valueOf(id)));
     }
 
     @Transactional(readOnly = true)

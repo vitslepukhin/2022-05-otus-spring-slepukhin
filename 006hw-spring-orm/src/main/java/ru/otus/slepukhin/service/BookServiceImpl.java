@@ -7,6 +7,7 @@ import ru.otus.slepukhin.domain.Book;
 import ru.otus.slepukhin.repositories.BookRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -23,8 +24,8 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(readOnly = true)
     @Override
-    public Book getById(long id) {
-        return bookRepository.findById(id).get();
+    public Book getById(long id) throws Exception {
+        return bookRepository.findById(id).orElseThrow(() -> new Exception(String.valueOf(id)));
     }
 
     @Transactional(readOnly = true)

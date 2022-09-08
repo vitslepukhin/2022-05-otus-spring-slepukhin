@@ -12,42 +12,41 @@ import ru.otus.slepukhin.domain.Genre;
 import java.util.List;
 
 @ShellComponent
-@ShellCommandGroup(ShellService.groupPrefix)
+@ShellCommandGroup("book")
 @AllArgsConstructor
 public class ShellService {
-    public final static String groupPrefix = "book";
     private final BookService bookService;
 
-    @ShellMethod(value = "Get book's count", key = groupPrefix + " getCount")
+    @ShellMethod(value = "Get book's count", key = "book getCount")
     public long getCount() {
         return bookService.getCount();
     }
 
-    @ShellMethod(value = "Get book by id", key = groupPrefix + " getById")
-    public Book getById(long id) {
+    @ShellMethod(value = "Get book by id", key = "book getById")
+    public Book getById(long id) throws Exception {
         return bookService.getById(id);
     }
 
-    @ShellMethod(value = "Get all books", key = groupPrefix + " getAll")
+    @ShellMethod(value = "Get all books", key = "book getAll")
     public List<Book> getAll() {
         return bookService.getAll();
     }
 
-    @ShellMethod(value = "Insert book", key = groupPrefix + " insert")
+    @ShellMethod(value = "Insert book", key = "book insert")
     public long insert(String title, long authorId, long genreId) {
         Author author = new Author();
         author.setId(authorId);
         Genre genre =  new Genre();
         genre.setId(genreId);
-        return bookService.insert(new Book(0, title, List.of(new Author(authorId)), new Genre(genreId), List.of()));
+        return bookService.insert(new Book(0, title, List.of(new Author(authorId)), new Genre(genreId)));
     }
 
-    @ShellMethod(value = "Update book", key = groupPrefix + " update")
+    @ShellMethod(value = "Update book", key = "book update")
     public void update(long id, String title, long authorId, long genreId) {
-        bookService.update(new Book(id, title, List.of(new Author(authorId)), new Genre(genreId), List.of()));
+        bookService.update(new Book(id, title, List.of(new Author(authorId)), new Genre(genreId)));
     }
 
-    @ShellMethod(value = "Delete book", key = groupPrefix + " deleteById")
+    @ShellMethod(value = "Delete book", key = "book deleteById")
     public void deleteById(long id) {
         bookService.deleteById(id);
     }
