@@ -16,5 +16,6 @@
         <module>003hw-spring-boot-based</module>
         <module>004hw-spring-boot-shell-based</module>
         <module>005hw-spring-jdbc</module>
+        <module>006hw-spring-orm</module>
     </modules>
 </project>
