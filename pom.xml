@@ -17,7 +17,7 @@
         <module>004hw-spring-boot-shell-based</module>
         <module>005hw-spring-jdbc</module>
         <module>006hw-spring-orm</module>
-
-	<module>008hw-spring-data-mongodb</module>
+        <module>007hw-spring-data-jpa</module>
+        <module>008hw-spring-data-mongodb</module>
     </modules>
 </project>
