@@ -33,10 +33,6 @@ public class ShellService {
 
     @ShellMethod(value = "Insert book", key = "book insert")
     public String insert(String title, String authorId, String genreId) {
-        Author author = new Author();
-        author.setId(authorId);
-        Genre genre = new Genre();
-        genre.setId(genreId);
         return bookService.insert(new Book(title, List.of(new Author(authorId)), new Genre(genreId)));
     }
 
