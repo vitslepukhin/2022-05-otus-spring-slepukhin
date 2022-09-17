@@ -9,3 +9,5 @@ spring:
     script:
       enabled: false
   main.allow-circular-references: true
+mongock:
+  enabled: false
