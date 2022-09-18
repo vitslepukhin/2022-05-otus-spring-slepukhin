@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.slepukhin.domain.Book;
 import ru.otus.slepukhin.repositories.BookRepository;
+import ru.otus.slepukhin.repositories.CommentRepository;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
     @Override
@@ -49,5 +51,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public void deleteById(String id) {
         bookRepository.deleteById(id);
+        commentRepository.deleteByBookId(id);
     }
 }

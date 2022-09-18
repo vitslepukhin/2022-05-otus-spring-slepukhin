@@ -7,6 +7,7 @@ import ru.otus.slepukhin.domain.Author;
 import ru.otus.slepukhin.domain.Book;
 import ru.otus.slepukhin.domain.Genre;
 import ru.otus.slepukhin.repositories.BookRepository;
+import ru.otus.slepukhin.repositories.CommentRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,12 @@ class BookServiceImplTest {
     private static final Book BOOK_FOR_INSERT = new Book("", "Inserted book", List.of(new Author("2", "Smith John")), new Genre("2", "popular"));
     private static final List<Book> EXPECTED_BOOKS_LIST = List.of(new Book("1", "Theoretical physics", List.of(new Author("1", "Pushkin Alexander")), new Genre("1", "science")), new Book("2", "Folk stories", List.of(new Author("2", "Smith John")), new Genre("3", "folk")), new Book("3", "Popular chemistry", List.of(new Author("3", "Family Name")), new Genre("2", "popular")));
     private final BookRepository mockBookRepository = mock(BookRepository.class);
+    private final CommentRepository mockCommentRepository = mock(CommentRepository.class);
     private BookServiceImpl bookServiceImpl;
 
     @BeforeEach
     void initBookService() {
-        bookServiceImpl = new BookServiceImpl(mockBookRepository);
+        bookServiceImpl = new BookServiceImpl(mockBookRepository, mockCommentRepository);
     }
 
 
@@ -70,6 +72,7 @@ class BookServiceImplTest {
     void shouldCorrectDelete() {
         bookServiceImpl.deleteById(EXISTING_BOOK_ID);
         verify(mockBookRepository, atLeastOnce()).deleteById(EXISTING_BOOK_ID);
+        verify(mockCommentRepository, atLeastOnce()).deleteByBookId(EXISTING_BOOK_ID);
     }
 
     @DisplayName("Should correct update")
