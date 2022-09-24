@@ -1,0 +1,9 @@
+spring:
+  thymeleaf:
+    enabled=false:
+  datasource:
+    url: jdbc:h2:mem:memdb
+  sql:
+    init:
+      mode: never
+  main.allow-circular-references: true
