@@ -19,6 +19,7 @@
         <module>006hw-spring-orm</module>
         <module>007hw-spring-data-jpa</module>
         <module>008hw-spring-data-mongodb</module>
-	<module>009hw-spring-mvc-view</module>
+        <module>009hw-spring-mvc-view</module>
+        <module>010hw-spring-rest-spa</module>
     </modules>
 </project>
