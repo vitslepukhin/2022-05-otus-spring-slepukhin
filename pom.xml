@@ -21,5 +21,6 @@
         <module>008hw-spring-data-mongodb</module>
         <module>009hw-spring-mvc-view</module>
         <module>010hw-spring-rest-spa</module>
+	<module>011hw-spring-webflux</module>
     </modules>
 </project>
