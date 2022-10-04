@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      database: books
+  mongodb.embedded.version: 3.5.5
+  shell:
+    interactive:
+      enabled: false
+    script:
+      enabled: false
+  main.allow-circular-references: true
+mongock:
+  enabled: false
