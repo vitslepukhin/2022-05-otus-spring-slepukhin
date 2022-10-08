@@ -22,5 +22,6 @@
         <module>009hw-spring-mvc-view</module>
         <module>010hw-spring-rest-spa</module>
 	<module>011hw-spring-webflux</module>
+	<module>012hw-spring-mvc-security</module>
     </modules>
 </project>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+<header th:insert="list.html :: header"> </header>
+<!-- Person edition -->
+<form id="edit-form" action="edit.html" method="post" th:action="@{/edit(id=${book != null ? book.id : 0 })}">
+    <h3>Book Info:</h3>
+
+    <div th:if="*{book == null}" class="row">
+        <label>New book</label>
+    </div>
+    <div th:if="*{book != null}" class="row">
+        <label>ID:</label>
+        <span th:text="*{book.id}">bookId</span>
+        <input id="id" type="hidden" value="1" th:value="*{book.id}"/>
+    </div>
+
+    <div class="row">
+        <label for="title">Title:</label>
+        <input id="title" name="title" type="text" value="Book Title" th:value="*{book != null ? book.title : null}"/>
+    </div>
+    <div class="row">
+        <label for="genre">Genre:</label>
+        <select id="genre" name="genre" th:value="*{book != null ? book.genre : null}">
+            <option th:each="optionGenre : ${genres}" th:value="*{optionGenre.id}" th:text="*{optionGenre.name}"
+                    th:selected="${book != null ? book.genre.id == optionGenre.id : false}">Genre
+            </option>
+        </select>
+    </div>
+    <div class="row">
+        <label for="authors">Authors:</label>
+        <select id="authors" name="authors" th:value="*{book != null ? book.authors : null}" multiple>
+            <option th:each="optionAuthor : ${authors}" th:value="*{optionAuthor.id}" th:text="*{optionAuthor.name}"
+                    th:selected="${book != null ? book.authors.contains(optionAuthor) : false}">Author
+            </option>
+        </select>
+    </div>
+
+    <div class="row">
+        <button type="submit">Save</button>
+        <a href="list.html" th:href="@{/}">
+            <button type="button">Cancel</button>
+        </a>
+    </div>
+</form>
+
+</body>
+</html>
